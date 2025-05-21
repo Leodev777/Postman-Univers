@@ -1,0 +1,285 @@
+{
+	"info": {
+		"_postman_id": "4af83941-c445-4c23-8f7e-ec08e426f6bf",
+		"name": "[7] Automation University",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28412091",
+		"_collection_link": "https://telecom-api.postman.co/workspace/APIs~5c2ee624-bca3-4991-b58d-2b6aa6009d93/collection/28412091-4af83941-c445-4c23-8f7e-ec08e426f6bf?action=share&source=collection_link&creator=28412091"
+	},
+	"item": [
+		{
+			"name": "Test Suite #8 Automation University",
+			"item": [
+				{
+					"name": "User-token",
+					"item": [
+						{
+							"name": "Create token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Parse the response body\r",
+											"let response = pm.response.json(); \r",
+											"\r",
+											"// Extract a specific value, e.g., \"id\"\r",
+											"let value = response.access_token; \r",
+											"\r",
+											"// Set the extracted value as an environment variable\r",
+											"pm.collectionVariables.set(\"token\", value);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{tokenProduct}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"geekqa@test.com\",\r\n  \"password\": \"geekqa2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://student.geekqa.net/api/login",
+									"protocol": "https",
+									"host": [
+										"student",
+										"geekqa",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Students",
+					"item": [
+						{
+							"name": "[1] Buscar estudiante",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Deberia reponder 200 OK\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://student.geekqa.net/api/students/",
+									"protocol": "https",
+									"host": [
+										"student",
+										"geekqa",
+										"net"
+									],
+									"path": [
+										"api",
+										"students",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[2] Buscar ID estudiante",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://student.geekqa.net/api/students/813",
+									"protocol": "https",
+									"host": [
+										"student",
+										"geekqa",
+										"net"
+									],
+									"path": [
+										"api",
+										"students",
+										"813"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[3] Crear estudiante",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let random = pm.globals.replaceIn('{{$$randomEmail}}');\r",
+											"console.log(random);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Valores posibles de la variable local\r",
+											"const courseIds = [3, 4, 11];\r",
+											"\r",
+											"// Seleccionar un id de curso al azar\r",
+											"const randomCourseId = courseIds[Math.floor(Math.random() * courseIds.length)];\r",
+											"\r",
+											"// Guardar la variable local\r",
+											"pm.environment.set(\"course_id\", randomCourseId);\r",
+											"\r",
+											"// Imprimir en consola\r",
+											"console.log(\"course_id seleccionado:\", randomCourseId);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"first_name\": \"{{$randomFirstName}}\",\r\n        \"last_name\": \"{{$randomLastName}}\",\r\n        \"email\": \"{{$randomEmail}}\",\r\n        \"status\": true,\r\n        \"course_id\": \"11\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://student.geekqa.net/api/students",
+									"protocol": "https",
+									"host": [
+										"student",
+										"geekqa",
+										"net"
+									],
+									"path": [
+										"api",
+										"students"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[4] Eliminar estudiante",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://student.geekqa.net/api/students/44",
+									"protocol": "https",
+									"host": [
+										"student",
+										"geekqa",
+										"net"
+									],
+									"path": [
+										"api",
+										"students",
+										"44"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
